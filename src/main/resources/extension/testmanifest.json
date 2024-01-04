@@ -1,0 +1,22 @@
+{
+    "name": "wsName",
+    "version": "1.0.0",
+    "description": "wsDescription",
+    "manifest_version": 3,
+    "author": "Scurto",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "wsDefaultTitle"
+    },
+    "content_scripts": [
+        {
+          "js":["/js/jquery-3.6.0.min.js", "/js/stomp.umd.min.js"],
+          "matches": ["*://*/*"],
+          "run_at": "document_end"
+        }
+    ],
+    "background": {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    }
+}

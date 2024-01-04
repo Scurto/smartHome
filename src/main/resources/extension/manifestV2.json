@@ -1,0 +1,23 @@
+{
+    "name": "wsName",
+    "version": "1.0.0",
+    "description": "wsDescription",
+    "manifest_version": 2,
+    "author": "Scurto",
+    "content_scripts": [
+        {
+          "matches": [
+            "https://*/*",
+            "http://*/*"
+          ],
+          "js": [
+            "script.js"
+          ]
+        }
+      ],
+    "background": {
+        "scripts": ["service-worker.js"],
+        "type": "module"
+    },
+    "permissions": ["tabs"]
+}

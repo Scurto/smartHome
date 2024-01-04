@@ -1,8 +1,10 @@
 package com.smart.smartHome.controller;
 
 import com.smart.smartHome.common.PkDevice;
+import com.smart.smartHome.controller.listener.WebsocketChromeListener;
 import com.smart.smartHome.model.Greeting;
 import com.smart.smartHome.model.HelloMessage;
+import com.smart.smartHome.model.chrome.ChromeTab;
 import com.smart.smartHome.service.PkService;
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
@@ -19,6 +21,7 @@ import org.springframework.web.util.HtmlUtils;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 @RestController
 @AllArgsConstructor
@@ -26,6 +29,7 @@ public class TestController {
 
     private final SimpMessagingTemplate template;
     private final PkService pkService;
+    private final WebsocketChromeListener listener;
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
@@ -34,18 +38,21 @@ public class TestController {
         return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
     }
 
-    @MessageMapping("/helloTest")
-    public Greeting helloTest(HelloMessage message) throws Exception {
-        Thread.sleep(1000); // simulated delay
-        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
-    }
+//    @MessageMapping("/helloTest")
+//    public Greeting helloTest(ArrayList<ChromeTab> list) throws Exception {
+//        System.out.println(list);
+//        return new Greeting("Hello, ");
+//    }
 
 
     @GetMapping("/test")
 //    @SendTo("/topic/greetings")
     public String test() {
         template.convertAndSend("/topic/greetings", new Greeting("Fire"));
-        template.convertAndSend("/topic/myTest", new Greeting("Fire"));
+        while (listener.getTabs() == null) {}
+        System.out.println(listener.getTabs());
+        listener.setTabs(null);
+
 //        return new Greeting("Hello, " + HtmlUtils.htmlEscape("Scurto") + "!");
 //        String volume = pkService.getAudioVolume(PkDevice.SPEAKERS.getValue());
 //        showsounddevices();
