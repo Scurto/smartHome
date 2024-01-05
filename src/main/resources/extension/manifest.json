@@ -8,17 +8,17 @@
         "default_popup": "index.html",
         "default_title": "wsDefaultTitle"
     },
-    "content_scripts": [
-        {
-          "matches": [
-            "https://*/*",
-            "http://*/*"
-          ],
-          "js": [
-            "script.js"
-          ]
-        }
-      ],
+//    "content_scripts": [
+//        {
+//          "matches": [
+//            "https://*/*",
+//            "http://*/*"
+//          ],
+//          "js": [
+//            "script.js"
+//          ]
+//        }
+//    ],
     "web_accessible_resources": [
     {
         "matches": [
@@ -34,5 +34,6 @@
         "service_worker": "service-worker.js",
         "type": "module"
     },
-    "permissions": ["tabs"]
+    "host_permissions": ["https://*/*"],
+    "permissions": ["tabs", "scripting", "activeTab"]
 }

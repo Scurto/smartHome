@@ -2,7 +2,7 @@ import { Client } from './js/stomp.js';
 
 
 const client = new Client({
-    brokerURL: 'ws://localhost:7788/gs-guide-websocket',
+    brokerURL: 'ws://localhost:7788/wsSmartHome',
       onConnect: () => {
         client.subscribe('/topic/greetings', message => {
             console.log(chrome.tabs);
@@ -43,6 +43,62 @@ const client = new Client({
             // }
           }
         );
+
+        client.subscribe('/chrome/tabs', () => {
+              getAllTabs();
+              async function getAllTabs() {
+                  let tabs = await chrome.tabs.query({});
+                  client.publish({ destination: '/app/tabs/response', body: JSON.stringify(tabs)});
+                  console.log('Date', new Date());
+                  console.log('TABS', tabs);
+              }
+          }
+        );
+          client.subscribe('/chrome/executeScript', (message) => {
+
+                  // chrome.scripting
+                  //     .executeScript({
+                  //         target : {tabId : 932214962, allFrames : true},
+                  //         files : [ "script.js" ],
+                  //     })
+                  // .then(() => console.log("script injected in all frames"));
+                  let request = JSON.parse(message.body);
+                  chrome.scripting
+                      .executeScript({
+                          target : {tabId : request.id, allFrames : false},
+                          func: () => {
+                              // write your code here
+                              console.log('ABCDS');
+                              alert("dakflghdlkfgh'sdlkfg'sdkfgh'sdl;kfgh'sdkfhg;lsdkfhg");
+                          },
+                      })
+                  .then(() => console.log("script injected in all frames"));
+
+
+                  // chrome.tabs
+                  //     .executeScript({
+                  //         target : {tabId : 932214648, allFrames : true},
+                  //         files : [ "script.js" ],
+                  //     })
+                  // .then(() => console.log("script injected in all frames"));
+
+
+                  // getTab();
+
+                  // async function getTab() {
+                  //     // let tab = await chrome.tabs.query({id: 932214648});
+                  //     // chrome.tabs.executeScript(932214648, {
+                  //     //     file: './script.js'
+                  //     // });
+                  //     chrome.scripting.executeScript({
+                  //         target: {tabId: 932214648, allFrames: true},
+                  //         files: ['./script.js'],
+                  //     });
+                  //
+                  //     console.log('TAB', tab);
+                  // }
+              }
+          );
         client.subscribe('/topic/greetings2', message => {
             console.log("greetings2");
 
@@ -66,25 +122,6 @@ const client = new Client({
             }
           }
         );
-        client.subscribe('/topic/greetings3', message => {
-          console.log("greetings3");
-          // getCurrentTabUrl();
-
-          // async function getCurrentTabUrl () {
-          //   const tabs = await chrome.tabs.query({ active: true })
-          //   console.log('url', tabs[0].url);
-          //   return tabs[0].url;
-          // }
-          chrome.windows.getAll({populate:true},function(windows){
-            windows.forEach(function(window){
-              window.tabs.forEach(function(tab){
-                //collect all of the urls here, I will just log them instead
-                console.log(tab);
-              });
-            });
-          });
-        }
-        );
       },
 });
 client.reconnectDelay = 300;
@@ -93,75 +130,4 @@ client.activate();
 const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
 chrome.runtime.onStartup.addListener(keepAlive);
 keepAlive();
-
-// const stompClient = new StompJs.Client({
-//   brokerURL: 'ws://localhost:8080/gs-guide-websocket'
-// });
-
-// let webSocket = new WebSocket("ws://localhost:8080/gs-guide-websocket");
-// webSocket.onopen = function(e) {
-//   console.log('test');
-// };
-// webSocket.onmessage = (event) => {
-//   console.log('message -> ' + event.data);
-// };
-
-// stompClient.activate();
-
-// stompClient.onConnect = (frame) => {
-//   // setConnected(true);
-//   console.log('Connected: ' + frame);
-//   stompClient.subscribe('/topic/greetings', (greeting) => {
-//     console.log("message -> " + JSON.parse(greeting.body).content);
-//   });
-// };
-
-// stompClient.onWebSocketError = (error) => {
-//   console.error('Error with websocket', error);
-// };
-
-// stompClient.onStompError = (frame) => {
-//   console.error('Broker reported error: ' + frame.headers['message']);
-//   console.error('Additional details: ' + frame.body);
-// };
-
-// function setConnected(connected) {
-//   $("#connect").prop("disabled", connected);
-//   $("#disconnect").prop("disabled", !connected);
-//   if (connected) {
-//       $("#conversation").show();
-//   }
-//   else {
-//       $("#conversation").hide();
-//   }
-//   $("#greetings").html("");
-// }
-
-// function connect() {
-  
-// }
-
-// function disconnect() {
-//   stompClient.deactivate();
-//   setConnected(false);
-//   console.log("Disconnected");
-// }
-
-// function sendName() {
-//   stompClient.publish({
-//       destination: "/app/hello",
-//       body: JSON.stringify({'name': $("#name").val()})
-//   });
-// }
-
-// function showGreeting(message) {
-//   $("#greetings").append("<tr><td>" + message + "</td></tr>");
-// }
-
-// $(function () {
-//   $("form").on('submit', (e) => e.preventDefault());
-//   $( "#connect" ).click(() => connect());
-//   $( "#disconnect" ).click(() => disconnect());
-//   $( "#send" ).click(() => sendName());
-// });
 

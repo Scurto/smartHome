@@ -1,6 +1,5 @@
 package com.smart.smartHome.controller.listener;
 
-import com.smart.smartHome.model.Greeting;
 import com.smart.smartHome.model.chrome.ChromeTab;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ public class WebsocketChromeListener {
 
     @MessageMapping("/tabs/response")
     public void tabsResponse(ArrayList<ChromeTab> tabs) throws Exception {
-//        System.out.println("tabsResponse");
         setTabs(tabs);
     }
 
