@@ -66,10 +66,25 @@ const client = new Client({
                   chrome.scripting
                       .executeScript({
                           target : {tabId : request.id, allFrames : false},
-                          func: () => {
+                          args: [request],
+                          func: (request) => {
                               // write your code here
-                              console.log('ABCDS');
-                              alert("dakflghdlkfgh'sdlkfg'sdkfgh'sdl;kfgh'sdkfhg;lsdkfhg");
+                              switch (request.event) {
+                                  case 'play':
+                                      document.querySelectorAll('video').forEach(v => { v.play() });
+                                      break;
+                                  case 'pause':
+                                      document.querySelectorAll('video').forEach(v => { v.pause() });
+                                      break;
+                                  case 'requestFullscreen':
+                                      document.querySelectorAll('video').forEach(v => { v.requestFullscreen() });
+                                      break;
+                                  case 'exitFullscreen':
+                                      document.querySelectorAll('video').forEach(v => { document.exitFullscreen() });
+                                      break;
+                                  default:
+                                      console.log('ABCDS');
+                              }
                           },
                       })
                   .then(() => console.log("script injected in all frames"));
