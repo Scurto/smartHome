@@ -11,11 +11,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.sound.sampled.*;
@@ -83,5 +85,10 @@ public class TestController {
 //            throw new RuntimeException(e);
 //        }
         return "OK";
+    }
+
+    @GetMapping("/health")
+    private ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok().build();
     }
 }
