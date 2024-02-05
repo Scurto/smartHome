@@ -35,7 +35,7 @@ public class ChromeController {
 
     private ArrayList<ChromeTab> fetchTabs(int i) throws InterruptedException {
         template.convertAndSend("/chrome/tabs", new Greeting("Fire"));
-        Thread.sleep(1000);
+        Thread.sleep(500);
         if (listener.getTabs() == null) {
             i++;
             if (i == 5) {
