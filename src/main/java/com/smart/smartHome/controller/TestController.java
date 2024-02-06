@@ -6,11 +6,8 @@ import com.smart.smartHome.model.Greeting;
 import com.smart.smartHome.model.HelloMessage;
 import com.smart.smartHome.model.chrome.ChromeTab;
 import com.smart.smartHome.service.PkService;
+import com.smart.smartHome.service.SeoTaskService;
 import lombok.AllArgsConstructor;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -31,6 +28,7 @@ public class TestController {
 
     private final SimpMessagingTemplate template;
     private final PkService pkService;
+    private final SeoTaskService taskService;
     private final WebsocketChromeListener listener;
 
     @MessageMapping("/hello")
@@ -85,6 +83,12 @@ public class TestController {
 //            throw new RuntimeException(e);
 //        }
         return "OK";
+    }
+
+    @GetMapping("/startTask")
+    private String startTask() throws IOException {
+        taskService.startTask();
+        return "";
     }
 
     @GetMapping("/health")

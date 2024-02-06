@@ -77,7 +77,9 @@ const client = new Client({
                                       document.querySelectorAll('video').forEach(v => { v.pause() });
                                       break;
                                   case 'requestFullscreen':
-                                      document.querySelectorAll('video').forEach(v => { v.requestFullscreen() });
+                                      // document.querySelectorAll('video').forEach(v => { v.requestFullscreen() });
+                                      console.log("1111");
+                                      document.dispatchEvent(new KeyboardEvent('keydown', {'keyCode': 70}));
                                       break;
                                   case 'exitFullscreen':
                                       document.querySelectorAll('video').forEach(v => { document.exitFullscreen() });
@@ -88,6 +90,16 @@ const client = new Client({
                           },
                       })
                   .then(() => console.log("script injected in all frames"));
+
+                  // 5 sec before
+                  // document.dispatchEvent(new KeyboardEvent('keydown', {'keyCode': 37}));
+                  // 5 sec after
+                  // document.dispatchEvent(new KeyboardEvent('keydown', {'keyCode': 39}));
+                  // speed x2
+                  // document.dispatchEvent(new KeyboardEvent('keydown', {'keyCode': 32}));
+
+              // video to start
+              // document.dispatchEvent(new KeyboardEvent('keydown', {'keyCode': 48}));
 
 
                   // chrome.tabs
